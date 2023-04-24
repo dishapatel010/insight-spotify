@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>User Top Tracks</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        transition: background-color 0.3s ease;
+      }
+
+      .light-theme {
+        background-color: #fff;
+        color: #333;
+      }
+
+      .dark-theme {
+        background-color: #282828;
+        color: white;
+      }
+
+      h1 {
+        color: #1db954;
+        text-align: center;
+      }
+
+      h2 {
+        color: #1db954;
+        margin-top: 50px;
+        margin-bottom: 10px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #888;
+        color: inherit;
+      }
+
+      th {
+        color: #1db954;
+        font-weight: normal;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+
+      tr:nth-child(even) {
+        background-color: inherit;
+      }
+
+      tr:nth-child(odd) {
+        background-color: inherit;
+      }
+
+      tr:hover {
+        background-color: inherit;
+      }
+
+      tbody tr:hover {
+        cursor: pointer;
+      }
+
+      a {
+        color: #1db954;
+        text-decoration: none;
+      }
+
+      .theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        background-color: transparent;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      .sun-icon,
+      .moon-icon {
+        font-size: 20px;
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+
+      .light-theme .sun-icon,
+      .dark-theme .moon-icon {
+        display: none;
+      }
+
+      .light-theme .moon-icon,
+      .dark-theme .sun-icon {
+        display: inline-block;
+      }
+    </style>
+
+    <script>
+      function toggleTheme() {
+  const body = document.querySelector('body');
+  body.classList.toggle('light-theme');
+  body.classList.toggle('dark-theme');
+
+  // store theme preference in local storage
+  const theme = body.classList.contains('light-theme') ? 'light-theme' : 'dark-theme';
+  localStorage.setItem('theme', theme);
+
+  // set a data attribute on the body to track the current theme
+  body.setAttribute('data-theme', theme);
+}
+
+      // set initial theme based on stored value
+      const storedTheme = localStorage.getItem('theme');
+const body = document.querySelector('body');
+
+if (storedTheme) {
+  // if there is a stored theme in local storage, use that as the initial theme
+  body.classList.add(storedTheme);
+  body.setAttribute('data-theme', storedTheme);
+} else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  // if no stored theme and user prefers dark mode, set dark theme as default
+  body.classList.add('dark-theme');
+  body.setAttribute('data-theme', 'dark-theme');
+} else {
+  // otherwise, set light theme as default
+  body.classList.add('light-theme');
+  body.setAttribute('data-theme', 'light-theme');
+}
+    </script>
+  </head>
+
+  <body class="dark-theme">
+    <div class="theme-toggle" onclick="toggleTheme()">
+      <span class="sun-icon">&#x1f31e;</span>
+      <span class="moon-icon">&#x1f319;</span>
+    </div>
+
+    <h1>User Top Tracks</h1>
+
+    <div class="container">
+      {% for time_range, data in data.items() %}
+      <h2>{{ time_range | title }} Top Tracks</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ranking</th>
+            <th>Track Name</th>
+            <th>Artist</th>
+            <th>Album</th>
+            <th>Genres</th>
+            <th>Release Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for track in data %}
+          <tr>
+            <td>{{ track['Index'] }}</td>
+            <td>{{ track['Track Name'] | safe }}</td>
+            <td>{{ track['Artist'] }}</td>
+            <td>{{ track['Album'] }}</td>
+            <td>{{ track['Genres'] }}</td>
+            <td>{{ track['Release Date'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endfor %}
+    </div>
+  </body>
+</html>

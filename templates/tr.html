@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Top Artists</title>
+    <style>
+        body {
+            background-color: #282828;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        h2 {
+            color: #1DB954;
+            margin-top: 50px;
+            margin-bottom: 10px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 50px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #888;
+        }
+
+        th {
+            color: #1DB954;
+            font-weight: normal;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #333;
+        }
+
+        tr:hover {
+            background-color: #444;
+        }
+
+        tbody tr:hover {
+            cursor: pointer;
+        }
+
+        a {
+            color: #1DB954;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    {% for data_tuple in data %}
+        <h2>{{ data_tuple[1] | title }} Top Artists</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Artist Name</th>
+                    <th>Genres</th>
+                    <th>Popularity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in data_tuple[0][0].iterrows() %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ row['Artist Name'] | safe }}</td>
+                        <td>{{ row['Genres'] }}</td>
+                        <td>{{ row['Popularity'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+</body>
+</html>

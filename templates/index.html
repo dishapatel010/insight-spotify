@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Insights & Analysis</title>
+    <style>
+      /* Import external font */
+      @import url('https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap');
+
+      /* Set default background color and font-family for the page */
+      body {
+        background-color: #191414;
+        color: #fff;
+        font-family: 'Nunito Sans', sans-serif;
+        transition: background-color 0.5s ease;
+        overflow-y: hidden;
+      }
+
+      /* Light theme */
+      body.light-theme {
+        background-color: #fff;
+        color: #000;
+      }
+
+      /* Center the content vertically on the page */
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      /* Style the heading */
+      .heading {
+        font-size: 64px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #1db954;
+      }
+
+      /* Style the link */
+      a {
+        color: #1db954;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* Style the button */
+      .button {
+        background-color: #1db954;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 18px;
+        margin-top: 20px;
+        cursor: pointer;
+      }
+
+      .button:hover {
+        opacity: 0.8;
+      }
+
+      /* Toggle theme button */
+      .toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: transparent;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .toggle:hover {
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1 class="heading">Spotify Insights & Analysis</h1>
+      <p>Please authorize the app by clicking the button below:</p>
+      <a href="{{ auth_url }}"><button class="button">Authorize the app</button></a>
+    </div>
+
+    <!-- Toggle theme button -->
+<button class="toggle" onclick="toggleTheme()">
+  <span id="sun-icon">&#x1f31e;</span> 
+  <span id="moon-icon">&#x1f319;</span>
+</button>
+
+<script>
+  const body = document.body;
+  const sunIcon = document.getElementById("sun-icon");
+  const moonIcon = document.getElementById("moon-icon");
+
+  // Retrieve the user's preference from local storage
+  const theme = localStorage.getItem("theme");
+  if (theme === "light") {
+    body.classList.add("light-theme");
+    sunIcon.style.display = "none"; // Hide the sun icon in light mode
+  } else {
+    moonIcon.style.display = "none"; // Hide the moon icon in dark mode
+  }
+
+  function toggleTheme() {
+    if (body.classList.contains("light-theme")) {
+      body.classList.remove("light-theme");
+      sunIcon.style.display = "block";
+      moonIcon.style.display = "none";
+      // Save the user's preference to local storage
+      localStorage.setItem("theme", "dark");
+    } else {
+      body.classList.add("light-theme");
+      sunIcon.style.display = "none";
+      moonIcon.style.display = "block";
+      // Save the user's preference to local storage
+      localStorage.setItem("theme", "light");
+    }
+  }
+</script>
+  </body>
+</html>

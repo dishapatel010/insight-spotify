@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Now Playing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background-color: #0D1117;
+            color: #b3b3b3;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.42857143;
+            margin: 0;
+        }
+
+        h2 {
+            color: #1DB954;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 25px 0 10px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .current-song-container {
+            margin-top: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .current-song-container p {
+            margin: 0;
+        }
+        
+        iframe {
+            max-width: 100%;
+            height: 232px;
+            border: none;
+        }
+        
+        @media (min-width: 768px) {
+            .current-song-container {
+                margin-top: 70px;
+                margin-bottom: 60px;
+            }
+
+            iframe {
+                height: 380px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% if playing_status is not none %}
+        {% if spotify_track_uri %}
+            <h2>Currently Playing Song</h2>
+        {% else %}
+            <h2>Last Played Song</h2>
+        {% endif %}
+        
+        <div class="current-song-container">
+            <p id="current-song">{{ playing_status }}</p>
+
+            <!-- Add an embedded Spotify track preview using the Spotify track URI -->
+            {% if spotify_track_uri %}
+            <iframe src="https://open.spotify.com/embed/track/{{ spotify_track_uri }}?utm_source=generator"></iframe>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>No song currently playing</p>
+    {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Set up a timer to update the currently playing song every 30 seconds
+            var updateInterval = setInterval(updateCurrentSong, 30000);
+            
+            // Clear the interval before setting a new one
+            function updateCurrentSong() {
+                clearInterval(updateInterval);
+                $.get('/current_song', function(data) {
+                    // Replace the content of the 'current-song' div with the updated currently playing song data
+                    $('#current-song').html(data.playing_status);
+
+                    // Update the header based on whether the user is currently playing a song or not
+                    if (data.spotify_track_uri) {
+                        $('h2').text('Currently Playing Song');
+                    } else {
+                        $('h2').text('Last Played Song');
+                    }
+
+                    // Set the src attribute of the <iframe> tag to the embedded Spotify track preview URL if spotify_track_uri is available
+                    if (data.spotify_track_uri) {
+                        $('iframe').attr('src', 'https://open.spotify.com/embed/track/' + data.spotify_track_uri + '?utm_source=generator');
+                    }
+
+                    // Set up a new timer to update the currently playing song every 30 seconds
+                    updateInterval = setInterval(updateCurrentSong, 30000);
+                });
+            };
+        });
+    </script>
+</body>
+</html>

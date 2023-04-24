@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Spotify App</title>
+  <style>
+    /* Set background color and font-family for the page */
+    body {
+      background-color: #181818;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue',
+        sans-serif;
+    }
+
+    /* Center the content vertically on the page */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    /* Style the heading */
+    .heading {
+      font-size: 64px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #1db954;
+    }
+
+    /* Style the card */
+    .card {
+      border: 1px solid #282828;
+      border-radius: 5px;
+      padding: 40px;
+      margin-top: 20px;
+      background-color: #282828;
+    }
+
+    /* Style the subheading */
+    .subheading {
+      font-size: 36px;
+      margin-bottom: 10px;
+      color: #1db954;
+    }
+
+    /* Style the links */
+    a {
+      color: #1db954;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Style the buttons */
+    .button {
+      background-color: #1db954;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 18px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      opacity: 0.8;
+    }
+
+    /* Light/Dark theme toggle */
+    .toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 1;
+    }
+
+    .toggle label {
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+      background-color: #ccc;
+      border-radius: 15px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .toggle label:after {
+      content: "";
+      display: block;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: #fff;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .toggle input[type="checkbox"] {
+      display: none;
+    }
+
+    .toggle input[type="checkbox"]:checked + label {
+      background-color: #1db954;
+    }
+
+    .toggle input[type="checkbox"]:checked + label:after {
+      transform: translateX(30px);
+    }
+
+    /* Light theme */
+    body.light-theme {
+      background-color: #fff;
+      color: #000;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toggle">
+    <input type="checkbox" id="theme-toggle">
+    <label for="theme-toggle"></label>
+  </div>
+
+  <div class="container">
+    <div class="card">
+    <div style="display: flex; align-items: center;">
+      {% if user_profile_picture is not none %}
+        <img src="{{ user_profile_picture }}" alt="{{ display_name }}'s profile picture" width="100px" style="border-radius: 50%;">
+      {% endif %}
+      <h2 style="margin-left: 20px;">{{ display_name }}</h2>
+   </div>
+    <h3 class="subheading">Basic Information</h3>
+    <p>Email: {{ email }}</p>
+    <p>Followers: {{ followers }}</p>
+    <p>Country: {{ country }}</p>
+    <a href="{{ url_for('recently_played') }}"><button class="button">View Recently Played Tracks</button></a>
+    <a href="{{ url_for('user_top_tracks') }}"><button class="button">View Top Tracks</button></a>
+    <a href="{{ url_for('user_top_albums') }}"><button class="button">View Top Albums</button></a>
+    <a href="{{ url_for('user_top_artists') }}"><button class="button">View Top Artists</button></a>
+    <a href="{{ url_for('user_top_tracks_by_decade') }}"><button class="button">View Top Decades</button></a>
+    <a href="{{ url_for('current_song') }}"><button class="button">View Now Playing</button></a>
+    <a href="{{ url_for('pg') }}"><button class="button">Playlists Analysis</button></a>
+  </div>
+  </div>
+<script>
+  const toggle = document.getElementById("theme-toggle");
+const body = document.body;
+
+// Retrieve theme preference from local storage if available
+const theme = localStorage.getItem('theme');
+if (theme === 'light') {
+  toggle.checked = true;
+  body.classList.add('light-theme');
+  document.querySelector('.card').style.backgroundColor = '#f2f2f2';
+}
+
+toggle.addEventListener("change", function() {
+  if (this.checked) {
+    body.classList.add("light-theme");
+    document.querySelector(".card").style.backgroundColor = "#f2f2f2";
+    // Save theme preference to local storage
+    localStorage.setItem('theme', 'light');
+  } else {
+    body.classList.remove("light-theme");
+    document.querySelector(".card").style.backgroundColor = "#282828";
+    // Save theme preference to local storage
+    localStorage.removeItem('theme');
+  }
+});
+</script>
+</body>
+
+</html>

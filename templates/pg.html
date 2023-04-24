@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Enter Playlists</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body {
+			background-color: #000;
+			color: #fff;
+			font-family: Arial, sans-serif;
+			font-size: 16px;
+			line-height: 1.5;
+		}
+
+		h1 {
+			font-size: 28px;
+			margin-top: 0;
+			padding-top: 20px;
+			text-align: center;
+		}
+
+		form {
+			margin: 0 auto;
+			max-width: 600px;
+			padding: 20px;
+			text-align: center;
+		}
+
+		table {
+			border-collapse: collapse;
+			margin-bottom: 20px;
+			width: 100%;
+		}
+
+		th, td {
+			border: none;
+			padding: 8px;
+			text-align: left;
+			vertical-align: middle;
+		}
+
+		th {
+			background-color: #1DB954;
+			color: #fff;
+			font-weight: bold;
+			text-transform: uppercase;
+		}
+
+		input[type="text"], input[type="submit"] {
+			border-radius: 4px;
+			box-shadow: none;
+			height: 40px;
+			padding: 8px;
+			width: 100%;
+			border: 2px solid #282828;
+			background-color: #191414;
+			color: #fff;
+			font-size: 16px;
+			line-height: 24px;
+		}
+
+		input[type="submit"] {
+			background-color: #1DB954;
+			color: #fff;
+			cursor: pointer;
+			margin-top: 10px;
+			text-transform: uppercase;
+			border: none;
+			box-shadow: none;
+			padding: 10px 20px;
+			border-radius: 4px;
+			font-size: 16px;
+		}
+
+		input[type="submit"]:hover {
+			background-color: #1ED760;
+			transition: background-color 0.2s ease-in-out;
+		}
+
+		.add-row {
+			cursor: pointer;
+			color: #1DB954;
+			font-size: 24px;
+			line-height: 28px;
+			font-weight: bold;
+			margin-top: 8px;
+			display: block;
+			text-align: center;
+		}
+
+		.add-row:hover {
+			color: #fff;
+			transition: color 0.2s ease-in-out;
+		}
+
+		@media screen and (max-width: 600px) {
+
+			h1 {
+				font-size: 24px;
+				padding-top: 10px;
+			}
+
+			form {
+				padding: 10px;
+			}
+
+			input[type="text"], input[type="submit"] {
+				height: 32px;
+				padding: 6px;
+			}
+
+			.add-row {
+				font-size: 20px;
+				line-height: 24px;
+			}
+
+		}
+	</style>
+</head>
+<body>
+	<h1>Enter Playlists:</h1>
+	<form method="post" action="{{ url_for('generate_chart_route') }}">
+		<table id="playlist-table">
+			<tr>
+				<th>Name:</th>
+				<th>URL:</th>
+				<th></th>
+			</tr>
+			<tr>
+				<td><input type="text" name="name0"></td>
+				<td><input type="text" name="url0"></td>
+				<td><span class="add-row">Add</span></td>
+			</tr>
+		</table>
+		<input type="submit" value="Generate Analysis">
+	</form>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+            var addRowButtons = document.querySelectorAll('.add-row');
+            var table = document.getElementById('playlist-table');
+			addRowButtons.forEach(function(button){
+                button.addEventListener('click', function(event) {
+				    event.preventDefault();
+                    var numRows = table.rows.length;
+                    var newRow = table.insertRow(numRows - 1);
+                    newRow.innerHTML = `
+                        <td><input type="text" name="name${numRows-1}"></td>
+                        <td><input type="text" name="url${numRows-1}"></td>
+                        <td><span class="add-row">Add</span></td>
+                    `;
+                    newRow.querySelector('.add-row').addEventListener('click', arguments.callee);
+			    });
+            })
+		});
+	</script>
+</body>
+</html>
