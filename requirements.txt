@@ -1,0 +1,6 @@
+Flask
+pandas
+numpy
+plotly
+scikit-learn
+spotipy
